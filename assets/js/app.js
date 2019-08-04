@@ -2,8 +2,8 @@ $(function(){
     populateButton(searchArray, 'searchButton', '#buttonsArea');
 })
 
-var searchArray = ["terminator", "B", "C"];
-
+var searchArray = ["terminator", "jin-roh wolf brigade", "frozen"];
+console.log(searchArray)
 function populateButton(searchArray, classToAdd, areaToAddTo){
     $(areaToAddTo).empty();
     for(var i=0; i < searchArray.length; i++){
@@ -20,7 +20,7 @@ $(document).on('click', '.searchButton', function(){
     var queryURL = 'http://api.giphy.com/v1/gifs/search?q='+type+'&api_key=ZVErUHM086c7t7H9028Gw4K3a8rYqQZz&limit=12';
     $.ajax({url:queryURL,method:'GET'})
         .done(function(response){
-            for(var i = 0; i > response.data.length; i++){
+            for(var i = 0; i < response.data.length; i++){
                 var searchDiv = $('<div class="search-item">');
                 var rating = response.data[i].rating;
                 var p = $('<p>').text('Rating: ' + rating);
@@ -36,11 +36,23 @@ $(document).on('click', '.searchButton', function(){
                 searchDiv.append(image);
                 $('#searches').append(searchDiv);
             }
+            
         })
+})
+$(document).on('click', '.searchImage',function(){
+    var state = $(this).attr('data-state');
+    if(state == 'still'){
+        $(this).attr('src', $(this).data('animated'));
+        $(this).attr('data-state','animated');
+    } else{
+        $(this).attr('src', $(this).data('still'));
+        $(this).attr('data-state','still');
+    }
 })
 
 $('#addSearch').on('click', function(){
-    var newSearch= $('input').eq(0).val();
-    searchArray.push(newSearch, 'searchButton', '#buttonsArea');
+    var newSearch = $('input').eq(0).val();
+    searchArray.push(newSearch);
+    populateButton(searchArray, 'searchButton','#buttonsArea');
     return false;
 })
